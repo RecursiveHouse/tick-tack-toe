@@ -6,10 +6,12 @@ import './App.css';
 export const GlobalStateContext = createContext();
 
 const TickTacToeCell = ({ yIndex, xIndex }) => {
-  const displayState = oldState => ({...oldState, [yIndex]: [...oldState[yIndex], [xIndex], (oldState[yIndex][xIndex]) ? true : false ]})
+  const displayState = oldState => {
+    return ({...oldState, [yIndex]: (oldState[yIndex].slice(0, xIndex).concat([((oldState[yIndex][xIndex]) ? "rest" : "tests")]).concat(oldState[yIndex].slice(xIndex + 1)))})
+  }
   return (
     <GlobalStateContext.Consumer>{({ state, dispatch })  => {
-      return  <td onClick={() => console.log("dispatch ran") || dispatch(displayState)}>{state[yIndex][xIndex]}</td>}
+      return <td onClick={() => dispatch(displayState)}>{state[yIndex][xIndex]}</td>}
 
       }</GlobalStateContext.Consumer>
   );
