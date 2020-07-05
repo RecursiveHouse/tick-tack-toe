@@ -8,16 +8,17 @@ const TickTacToeCellContainer = styled(Paper)`
   height: 100%;
 `;
 
-const TickTacToeCell = ({ yIndex, xIndex, ...props }) => {
+export const TickTacToeCell = ({ yIndex, xIndex, player, ...props }) => {
   const updateGameOnClick = (oldState) => {
     return {
       ...oldState,
+      turn: !oldState.turn,
       gameState: oldState.gameState.reduce((newGameState, gameRow, index) => {
         const updatedRow =
           index === yIndex
             ? gameRow
                 .slice(0, xIndex)
-                .concat(gameRow[xIndex] ? "rest" : "best")
+                .concat(player ? "X" : "0")
                 .concat(gameRow.slice(xIndex + 1))
             : gameRow;
         return [...newGameState, updatedRow];

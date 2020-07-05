@@ -1,5 +1,11 @@
 import { createContext } from "react";
 
+export const GAME_STATE_INIT = [
+  [" ", " ", " "],
+  [" ", " ", " "],
+  [" ", " ", " "],
+];
+
 export const GlobalStateContext = createContext({
-  gameState: {},
+  gameState: GAME_STATE_INIT,
 });

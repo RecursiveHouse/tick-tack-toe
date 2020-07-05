@@ -1,43 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import "./App.css";
-import { Paper } from "@material-ui/core";
 import { GlobalStateContext } from "./store";
-
-const TickTacToeCellContainer = styled(Paper)`
-  height: 100%;
-`;
-
-const TickTacToeCell = ({ yIndex, xIndex, ...props }) => {
-  const updateGameOnClick = (oldState) => {
-    return {
-      ...oldState,
-      gameState: oldState.gameState.reduce((newGameState, gameRow, index) => {
-        const updatedRow =
-          index === yIndex
-            ? gameRow
-                .slice(0, xIndex)
-                .concat(gameRow[xIndex] ? "rest" : "best")
-                .concat(gameRow.slice(xIndex + 1))
-            : gameRow;
-        return [...newGameState, updatedRow];
-      }, []),
-    };
-  };
-  return (
-    <GlobalStateContext.Consumer>
-      {({ state, dispatch }) => {
-        return (
-          <td {...props} onClick={() => dispatch(updateGameOnClick)}>
-            <TickTacToeCellContainer elevation={1}>
-              {state.gameState[yIndex][xIndex]}
-            </TickTacToeCellContainer>
-          </td>
-        );
-      }}
-    </GlobalStateContext.Consumer>
-  );
-};
+import { TickTacToeCell } from "./tick-tac-toe-cell";
+import { GAME_STATE_INIT } from "./store";
+import { Button } from "@material-ui/core";
 
 const StyledTickTackToe = styled(TickTacToeCell)`
   width: 40px;
@@ -45,13 +12,20 @@ const StyledTickTackToe = styled(TickTacToeCell)`
   color: black;
 `;
 
+const PlayerContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 400px;
+`;
+
+const PlayerButton = styled(Button)`
+  opacity: ${(props) => (props.turn ? 70 : 100)}%;
+`;
+
 function App() {
   const [globalState, setGlobalState] = useState({
-    gameState: [
-      [" ", " ", " "],
-      [" ", " ", " "],
-      [" ", " ", " "],
-    ],
+    gameState: GAME_STATE_INIT,
+    turn: true,
   });
 
   const dispatch = (stateCreator) =>
@@ -63,22 +37,62 @@ function App() {
         <table>
           <tbody>
             <tr>
-              <StyledTickTackToe yIndex={0} xIndex={0} />
-              <StyledTickTackToe yIndex={0} xIndex={1} />
-              <StyledTickTackToe yIndex={0} xIndex={2} />
+              <StyledTickTackToe
+                player={globalState.turn}
+                yIndex={0}
+                xIndex={0}
+              />
+              <StyledTickTackToe
+                player={globalState.turn}
+                yIndex={0}
+                xIndex={1}
+              />
+              <StyledTickTackToe
+                player={globalState.turn}
+                yIndex={0}
+                xIndex={2}
+              />
             </tr>
             <tr>
-              <StyledTickTackToe yIndex={1} xIndex={0} />
-              <StyledTickTackToe yIndex={1} xIndex={1} />
-              <StyledTickTackToe yIndex={1} xIndex={2} />
+              <StyledTickTackToe
+                player={globalState.turn}
+                yIndex={1}
+                xIndex={0}
+              />
+              <StyledTickTackToe
+                player={globalState.turn}
+                yIndex={1}
+                xIndex={1}
+              />
+              <StyledTickTackToe
+                player={globalState.turn}
+                yIndex={1}
+                xIndex={2}
+              />
             </tr>
             <tr>
-              <StyledTickTackToe yIndex={2} xIndex={0} />
-              <StyledTickTackToe yIndex={2} xIndex={1} />
-              <StyledTickTackToe yIndex={2} xIndex={2} />
+              <StyledTickTackToe
+                player={globalState.turn}
+                yIndex={2}
+                xIndex={0}
+              />
+              <StyledTickTackToe
+                player={globalState.turn}
+                yIndex={2}
+                xIndex={1}
+              />
+              <StyledTickTackToe
+                player={globalState.turn}
+                yIndex={2}
+                xIndex={2}
+              />
             </tr>
           </tbody>
         </table>
+        <PlayerContainer>
+          <PlayerButton turn={!globalState.turn}>Player One</PlayerButton>
+          <PlayerButton turn={globalState.turn}>Player Two</PlayerButton>
+        </PlayerContainer>
       </div>
     </GlobalStateContext.Provider>
   );

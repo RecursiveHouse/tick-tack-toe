@@ -1,0 +1,63 @@
+import React, { useState } from "react";
+import styled from "styled-components";
+import "./App.css";
+import { GlobalStateContext } from "./store";
+import { TickTacToeCell } from "./tick-tac-toe-cell";
+import { GAME_STATE_INIT } from "./store";
+import { Button } from "@material-ui/core";
+
+const StyledTickTackToe = styled(TickTacToeCell)`
+  width: 40px;
+  height: 40px;
+  color: black;
+`;
+
+const PlayerContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 400px;
+`;
+
+const PlayerButton = styled(Button)``;
+
+function App() {
+  const [globalState, setGlobalState] = useState({
+    gameState: GAME_STATE_INIT,
+    turn: true,
+  });
+
+  const dispatch = (stateCreator) =>
+    setGlobalState((state) => stateCreator(state));
+
+  return (
+    <GlobalStateContext.Provider value={{ dispatch, state: globalState }}>
+      <div className="App">
+        <table>
+          <tbody>
+            <tr>
+              <StyledTickTackToe yIndex={0} xIndex={0} />
+              <StyledTickTackToe yIndex={0} xIndex={1} />
+              <StyledTickTackToe yIndex={0} xIndex={2} />
+            </tr>
+            <tr>
+              <StyledTickTackToe yIndex={1} xIndex={0} />
+              <StyledTickTackToe yIndex={1} xIndex={1} />
+              <StyledTickTackToe yIndex={1} xIndex={2} />
+            </tr>
+            <tr>
+              <StyledTickTackToe yIndex={2} xIndex={0} />
+              <StyledTickTackToe yIndex={2} xIndex={1} />
+              <StyledTickTackToe yIndex={2} xIndex={2} />
+            </tr>
+          </tbody>
+        </table>
+        <PlayerContainer>
+          <PlayerButton>Player One</PlayerButton>
+          <PlayerButton>Player Two</PlayerButton>
+        </PlayerContainer>
+      </div>
+    </GlobalStateContext.Provider>
+  );
+}
+
+export default App;
