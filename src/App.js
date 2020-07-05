@@ -1,8 +1,13 @@
 import React, { useState, createContext } from "react";
 import styled from "styled-components";
 import "./App.css";
+import { Paper } from "@material-ui/core";
 
 export const GlobalStateContext = createContext();
+
+const TickTacToeCellContainer = styled(Paper)`
+  height: 100%;
+`;
 
 const TickTacToeCell = ({ yIndex, xIndex, ...props }) => {
   const updateGameOnClick = (oldState) => {
@@ -25,7 +30,9 @@ const TickTacToeCell = ({ yIndex, xIndex, ...props }) => {
       {({ state, dispatch }) => {
         return (
           <td {...props} onClick={() => dispatch(updateGameOnClick)}>
-            {state.gameState[yIndex][xIndex]}
+            <TickTacToeCellContainer elevation={1}>
+              {state.gameState[yIndex][xIndex]}
+            </TickTacToeCellContainer>
           </td>
         );
       }}
@@ -37,8 +44,6 @@ const StyledTickTackToe = styled(TickTacToeCell)`
   width: 40px;
   height: 40px;
   color: black;
-  background-color: red;
-  border: solid black 9px;
 `;
 
 function App() {
