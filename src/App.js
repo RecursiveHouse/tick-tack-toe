@@ -26,6 +26,7 @@ function App() {
   const [globalState, setGlobalState] = useState({
     gameState: GAME_STATE_INIT,
     turn: true,
+    hasWon: false,
   });
 
   const dispatch = (stateCreator) =>
