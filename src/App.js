@@ -1,61 +1,77 @@
-import React, {useState, createContext} from 'react';
-import styled from 'styled-components';
-import './App.css';
-
+import React, { useState, createContext } from "react";
+import styled from "styled-components";
+import "./App.css";
 
 export const GlobalStateContext = createContext();
 
-const TickTacToeCell = ({ yIndex, xIndex }) => {
-  const displayState = oldState => {
-    return ({...oldState, [yIndex]: (oldState[yIndex].slice(0, xIndex).concat([((oldState[yIndex][xIndex]) ? "rest" : "tests")]).concat(oldState[yIndex].slice(xIndex + 1)))})
-  }
+const TickTacToeCell = ({ yIndex, xIndex, ...props }) => {
+  const updateGameOnClick = (oldState) => {
+    return {
+      ...oldState,
+      gameState: oldState.gameState.reduce((newGameState, gameRow, index) => {
+        const updatedRow =
+          index === yIndex
+            ? gameRow
+                .slice(0, xIndex)
+                .concat(gameRow[xIndex] ? "rest" : "best")
+                .concat(gameRow.slice(xIndex + 1))
+            : gameRow;
+        return [...newGameState, updatedRow];
+      }, []),
+    };
+  };
   return (
-    <GlobalStateContext.Consumer>{({ state, dispatch })  => {
-      return <td onClick={() => dispatch(displayState)}>{state[yIndex][xIndex]}</td>}
-
-      }</GlobalStateContext.Consumer>
+    <GlobalStateContext.Consumer>
+      {({ state, dispatch }) => {
+        return (
+          <td {...props} onClick={() => dispatch(updateGameOnClick)}>
+            {state.gameState[yIndex][xIndex]}
+          </td>
+        );
+      }}
+    </GlobalStateContext.Consumer>
   );
-}
+};
 
-const TickTacToeStyle = styled(TickTacToeCell)`
+const StyledTickTackToe = styled(TickTacToeCell)`
   width: 40px;
   height: 40px;
   color: black;
-  border: solid black 1px;
+  background-color: red;
+  border: solid black 9px;
 `;
-
 
 function App() {
   const [globalState, setGlobalState] = useState({
-    0: ["test", "test", "test"], 
-    1: ["test", "test", "test"],
-    2: ["test", "test", "test"],
+    gameState: [
+      [" ", " ", " "],
+      [" ", " ", " "],
+      [" ", " ", " "],
+    ],
   });
 
-  const dispatch = (stateCreator) => setGlobalState(state => stateCreator(state));
-
+  const dispatch = (stateCreator) =>
+    setGlobalState((state) => stateCreator(state));
 
   return (
-    <GlobalStateContext.Provider value={{dispatch, state: globalState}}>
+    <GlobalStateContext.Provider value={{ dispatch, state: globalState }}>
       <div className="App">
         <table>
           <tbody>
             <tr>
-              <TickTacToeStyle yIndex={0} xIndex={0}/>
-              <TickTacToeStyle yIndex={0} xIndex={1}/>
-              <TickTacToeStyle yIndex={0} xIndex={2}/>
+              <StyledTickTackToe yIndex={0} xIndex={0} />
+              <StyledTickTackToe yIndex={0} xIndex={1} />
+              <StyledTickTackToe yIndex={0} xIndex={2} />
             </tr>
             <tr>
-              <TickTacToeStyle yIndex={1} xIndex={0}/>
-              <TickTacToeStyle yIndex={1} xIndex={1}/>
-              <TickTacToeStyle yIndex={1} xIndex={2}/>
-
+              <StyledTickTackToe yIndex={1} xIndex={0} />
+              <StyledTickTackToe yIndex={1} xIndex={1} />
+              <StyledTickTackToe yIndex={1} xIndex={2} />
             </tr>
             <tr>
-              <TickTacToeStyle yIndex={2} xIndex={0}/>
-              <TickTacToeStyle yIndex={2} xIndex={1}/>
-              <TickTacToeStyle yIndex={2} xIndex={2}/>
-
+              <StyledTickTackToe yIndex={2} xIndex={0} />
+              <StyledTickTackToe yIndex={2} xIndex={1} />
+              <StyledTickTackToe yIndex={2} xIndex={2} />
             </tr>
           </tbody>
         </table>
