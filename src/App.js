@@ -1,9 +1,8 @@
-import React, { useState, createContext } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import "./App.css";
 import { Paper } from "@material-ui/core";
-
-export const GlobalStateContext = createContext();
+import { GlobalStateContext } from "./store";
 
 const TickTacToeCellContainer = styled(Paper)`
   height: 100%;
