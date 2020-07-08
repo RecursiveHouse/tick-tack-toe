@@ -49,10 +49,9 @@ const boardToPlayerState = (board) =>
 
 const attributeSquareToPlayer = (row) => (rowIndex) => (acc) =>
   row.reduce(
-    (acc, player, columnIndex) => ({
-      ...acc,
-      [player]:
-        acc[player] === undefined
+    (acc, player, columnIndex) =>
+      modifyObject(acc)(player)((playerValue) =>
+        playerValue === undefined
           ? {
               columns: modifyArray(
                 columnIndex,
@@ -66,10 +65,10 @@ const attributeSquareToPlayer = (row) => (rowIndex) => (acc) =>
               ),
             }
           : {
-              columns: modifyArray(columnIndex, add(1), acc[player].column),
-              rows: modifyArray(rowIndex, add(1), acc[player].column),
-            },
-    }),
+              columns: modifyArray(columnIndex, add(1), playerValue.column),
+              rows: modifyArray(rowIndex, add(1), playerValue.row),
+            }
+      ),
     acc
   );
 
@@ -80,6 +79,7 @@ const gt = (a) => (b) => a > b;
 const eq = (a) => (b) => a === b;
 // NOTE: all of these are in my helper library
 const constt = (a) => () => a;
+const modifyObject = (obj, key, fn) => ({ ...obj, [key]: fn(obj[key]) });
 const modifyArray = (idx, fn, arr) =>
   arr.slice(0, idx) + fn(arr[idx]) + arr.slice(idx + 1);
 const compose = (f) => (g) => (x) => f(g(x));
