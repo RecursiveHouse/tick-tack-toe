@@ -79,7 +79,10 @@ const gt = (a) => (b) => a > b;
 const eq = (a) => (b) => a === b;
 // NOTE: all of these are in my helper library
 const constt = (a) => () => a;
-const modifyObject = (obj, key, fn) => ({ ...obj, [key]: fn(obj[key]) });
+const modifyObject = (obj) => (key) => (fn) => ({
+  ...obj,
+  [key]: fn(obj[key]),
+});
 const modifyArray = (idx, fn, arr) =>
   arr.slice(0, idx) + fn(arr[idx]) + arr.slice(idx + 1);
 const compose = (f) => (g) => (x) => f(g(x));
